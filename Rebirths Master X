@@ -1,0 +1,214 @@
+local player = game.Players.LocalPlayer
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({
+    Name = "Rebirths Master X V2.3.6",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "OrionTest"
+})
+
+-- Main Tab
+local MainTab = Window:MakeTab({
+    Name = "Main",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local MainSection = MainTab:AddSection({
+    Name = "Main"
+})
+
+OrionLib:MakeNotification({
+    Name = "Welcome!",
+    Content = "Welcome to my hub!",
+    Image = "rbxassetid://4483345998",
+    Time = 5
+})
+
+MainTab:AddButton({
+    Name = "V2.4.6",
+    Callback = function()
+        player.Character.Humanoid.WalkSpeed = 16
+    end
+})
+
+MainTab:AddButton({
+    Name = "Credits : AndroidXhAckr",
+    Callback = function()
+        player.Character.Humanoid.JumpPower = 16
+    end
+})
+
+-- New Menu Farm Tab
+local MenuFarmTab = Window:MakeTab({
+    Name = "Menu Farm",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local MenuFarmSection = MenuFarmTab:AddSection({
+    Name = "Auto Features"
+})
+
+_G.autoClicker = false
+_G.autoRebirths = false
+
+MenuFarmTab:AddToggle({
+    Name = "AutoClicker",
+    Default = false,
+    Callback = function(state)
+        _G.autoClicker = state
+        if state then
+            OrionLib:MakeNotification({
+                Name = "AutoClicker On!",
+                Content = "AutoClicker has been enabled.",
+                Image = "rbxassetid://4483345998",
+                Time = 3
+            })
+
+            -- Start the AutoClicker loop
+            spawn(function()
+                while _G.autoClicker do
+                    game:GetService("ReplicatedStorage"):WaitForChild("TappingRemote"):WaitForChild("Tap"):FireServer()
+                    wait(0.1) -- Adjust the wait time if needed
+                end
+            end)
+        else
+            OrionLib:MakeNotification({
+                Name = "AutoClicker Off!",
+                Content = "AutoClicker has been disabled.",
+                Image = "rbxassetid://4483345998",
+                Time = 3
+            })
+        end
+    end
+})
+
+MenuFarmTab:AddToggle({
+    Name = "AutoRebirths",
+    Default = false,
+    Callback = function(state)
+        _G.autoRebirths = state
+        if state then
+            OrionLib:MakeNotification({
+                Name = "AutoRebirths On!",
+                Content = "AutoRebirths has been enabled.",
+                Image = "rbxassetid://4483345998",
+                Time = 3
+            })
+            
+            -- Start the AutoRebirths loop
+            spawn(function()
+                while _G.autoRebirths do
+                    local args = {
+                        [1] = 100000
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Rebirth"):FireServer(unpack(args))
+                    wait(0.1) -- Adjust the wait time if needed
+                end
+            end)
+        else
+            OrionLib:MakeNotification({
+                Name = "AutoRebirths Off!",
+                Content = "AutoRebirths has been disabled.",
+                Image = "rbxassetid://4483345998",
+                Time = 3
+            })
+        end
+    end
+})
+
+-- New Menu Egg Tab
+local MenuEggTab = Window:MakeTab({
+    Name = "Menu Egg",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local MenuEggSection = MenuEggTab:AddSection({
+    Name = "Egg Features"
+})
+
+-- Updated order of egg names, with "Candy Egg" as switch 7
+local eggNames = {
+    "Forest Egg",
+    "Winter Egg",
+    "Desert Egg",
+    "Beach Egg",
+    "Atlantis Egg",
+    "Volcanic Egg",
+    "Candy Egg",  -- Candy Egg logic included here
+}
+
+-- Add switches for each egg
+for _, eggName in ipairs(eggNames) do
+    MenuEggTab:AddToggle({
+        Name = eggName,
+        Default = false,
+        Callback = function(state)
+            if state then
+                OrionLib:MakeNotification({
+                    Name = eggName .. " On!",
+                    Content = eggName .. " has been enabled.",
+                    Image = "rbxassetid://4483345998",
+                    Time = 3
+                })
+
+                -- Start the loop for hatching the egg
+                _G.auto = true
+                spawn(function()
+                    while _G.auto do
+                        local args
+                        if eggName == "Forest Egg" then
+                            args = {
+                                [1] = workspace:WaitForChild("Eggs"):WaitForChild("Forest Egg")
+                            }
+                        elseif eggName == "Winter Egg" then
+                            args = {
+                                [1] = workspace:WaitForChild("Eggs"):WaitForChild("Winter Egg")
+                            }
+                        elseif eggName == "Desert Egg" then
+                            args = {
+                                [1] = workspace:WaitForChild("Eggs"):WaitForChild("Desert Egg")
+                            }
+                        elseif eggName == "Beach Egg" then
+                            args = {
+                                [1] = workspace:WaitForChild("Eggs"):WaitForChild("Beach Egg")
+                            }
+                        elseif eggName == "Atlantis Egg" then
+                            args = {
+                                [1] = workspace:WaitForChild("Eggs"):WaitForChild("Atlantis Egg")
+                            }
+                        elseif eggName == "Volcanic Egg" then
+                            args = {
+                                [1] = workspace:WaitForChild("Eggs"):WaitForChild("Volcanic Egg")
+                            }
+                        elseif eggName == "Candy Egg" then
+                            args = {
+                                [1] = workspace:WaitForChild("Eggs"):WaitForChild("Candy Egg") -- Candy Egg logic
+                            }
+                        else
+                            -- Fallback for other eggs
+                            args = {
+                                [1] = workspace:WaitForChild("Eggs"):WaitForChild(eggName)
+                            }
+                        end
+                        game:GetService("ReplicatedStorage"):WaitForChild("EggHatchingRemote"):WaitForChild("HatchServer"):InvokeServer(unpack(args))
+                        wait(3) -- Adjust the wait time if needed
+                    end
+                end)
+            else
+                OrionLib:MakeNotification({
+                    Name = eggName .. " Off!",
+                    Content = eggName .. " has been disabled.",
+                    Image = "rbxassetid://4483345998",
+                    Time = 3
+                })
+                
+                -- Stop the egg hatching loop
+                _G.auto = false
+            end
+        end
+    })
+end
